@@ -53,7 +53,7 @@ jobs:
           path: coverage-report
 
       - name: Convert coverage report to Cobertura format
-        run: go get -u github.com/t-yuki/gocover-cobertura && gocover-cobertura < cover.out > cobertura.xml
+        run: go get -u github.com/t-yuki/gocover-cobertura && gocover-cobertura < ./cover.out > cobertura.xml
 
       - name: Upload Cobertura XML as artifact
         uses: actions/upload-artifact@v2
