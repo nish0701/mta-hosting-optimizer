@@ -52,10 +52,11 @@ jobs:
           name: coverage-report
           path: coverage-report
 
+      - name: Install gopherbadger
+        run: go get -u github.com/jpoles1/gopherbadger
+
       - name: Generate and upload coverage badge
-        run: |
-          go get -u github.com/jpoles1/gopherbadger
-          gopherbadger -md="README.md"
+        run: gopherbadger -md="README.md"
 
       - name: Upload README.md as artifact
         uses: actions/upload-artifact@v2
