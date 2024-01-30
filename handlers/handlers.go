@@ -13,9 +13,11 @@ func GetHostnames(c *gin.Context) {
 	threshold := 1 // Default threshold
 
 	if thresholdStr != "" {
-		fmt.Println(thresholdStr, "%d", &threshold)
+		fmt.Sscanf(thresholdStr, "%d", &threshold)
 	}
 
-	hostnames := services.GetInactiveHostnames(threshold)
+	worker := services.PopulateGetInactiveHostsWorker()
+	worker.DataService.PopulateData()
+	hostnames := worker.GetInactiveHostnames(threshold)
 	c.JSON(http.StatusOK, hostnames)
 }
