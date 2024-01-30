@@ -7,11 +7,11 @@ on:
     branches: [ "main" ]
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Go
         uses: actions/setup-go@v3
@@ -21,42 +21,11 @@ jobs:
       - name: Build
         run: go build -v ./...
 
-      - name: Run unit tests and generate coverage
-        run: go test -v -coverprofile cover.out ./... -tags unit_test
+      - name: unit-test
+        run: go test -v -coverprofile cover.out  ./... -tags unit_test
 
-      - name: Upload coverage report as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-report
-          path: cover.out
+      - name: total-unit-test-coverage
+        run:  go tool cover -func=cover.out
 
-      - name: Run integration tests and generate coverage
-        run: go test -v -coverprofile cover.out ./... -tags integration
-
-      - name: Upload integration coverage report as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: integration-coverage-report
-          path: cover.out
-
-  visualize-coverage:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download coverage reports
-        uses: actions/download-artifact@v2
-        with:
-          name: coverage-report
-          path: coverage-report
-
-      - name: Convert coverage report to Cobertura format
-        run: go get -u github.com/t-yuki/gocover-cobertura && gocover-cobertura < ./cover.out > cobertura.xml
-
-      - name: Upload Cobertura XML as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: cobertura-xml
-          path: cobertura.xml
+      - name: integration-test
+        run: go test -v -coverprofile cover.out  ./... -tags integration
