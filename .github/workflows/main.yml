@@ -52,14 +52,11 @@ jobs:
           name: coverage-report
           path: coverage-report
 
-      - name: Install gopherbadger
-        run: go get -u github.com/jpoles1/gopherbadger
+      - name: Convert coverage report to Cobertura format
+        run: go get -u github.com/t-yuki/gocover-cobertura && gocover-cobertura < cover.out > cobertura.xml
 
-      - name: Generate and upload coverage badge
-        run: gopherbadger -md="README.md"
-
-      - name: Upload README.md as artifact
+      - name: Upload Cobertura XML as artifact
         uses: actions/upload-artifact@v2
         with:
-          name: readme
-          path: README.md
+          name: cobertura-xml
+          path: cobertura.xml
